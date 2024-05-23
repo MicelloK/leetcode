@@ -15,9 +15,13 @@ class Solution:
 
             result = beautiful_subsets_num(i+count_elements[nums[i]])
             if not rejected_elements[nums[i]]:
+                if nums[i]+k not in rejected_elements:
+                    result += (2 ** count_elements[nums[i]] - 1) * result
+                    return result
                 rejected_elements[nums[i]+k] = True
                 result += (2 ** count_elements[nums[i]] - 1) * beautiful_subsets_num(i+count_elements[nums[i]])
                 rejected_elements[nums[i]+k] = False
+
             return result
         
         return beautiful_subsets_num(0) - 1
