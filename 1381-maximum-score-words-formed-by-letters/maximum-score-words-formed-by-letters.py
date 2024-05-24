@@ -7,6 +7,8 @@ class Solution:
                 word_score += score[ord(char)-97]
             words_scores[word] = word_score
 
+        words_counter = {word: Counter(word) for word in words}
+
         def visit(i: int, available) -> int:
             if i >= len(words):
                 return 0
@@ -14,14 +16,13 @@ class Solution:
             max_val = visit(i+1, available)
 
             word = words[i]
-            word_counter = Counter(word)
             valid_word = True
-            for char, count in word_counter.items():
+            for char, count in words_counter[word].items():
                 if available[char] < count:
                     valid_word = False
 
             if valid_word:
-                new_available = available - word_counter
+                new_available = available - words_counter[word]
                 max_val = max(max_val, words_scores[word] + visit(i+1, new_available))
 
             return max_val
