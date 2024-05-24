@@ -1,16 +1,17 @@
 class Solution:
     def maxScoreWords(self, words: List[str], letters: List[str], score: List[int]) -> int:
-        words_scores = {word: sum(score[ord(char)-97] for char in word) for word in words}
+        words_scores = {}
+        for word in words:
+            word_score = 0
+            for char in word:
+                word_score += score[ord(char)-97]
+            words_scores[word] = word_score
 
-        def visit(i: int, available, memo) -> int:
+        def visit(i: int, available) -> int:
             if i >= len(words):
                 return 0
 
-            state = (i, tuple(available.items()))
-            if state in memo:
-                return memo[state]
-
-            max_val = visit(i+1, available, memo)
+            max_val = visit(i+1, available)
 
             word = words[i]
             word_counter = Counter(word)
@@ -21,11 +22,9 @@ class Solution:
 
             if valid_word:
                 new_available = available - word_counter
-                max_val = max(max_val, words_scores[word] + visit(i+1, new_available, memo))
+                max_val = max(max_val, words_scores[word] + visit(i+1, new_available))
 
-            memo[state] = max_val
             return max_val
 
         available = Counter(letters)
-        memo = {}
-        return visit(0, available, memo)
+        return visit(0, available)
