@@ -4,19 +4,17 @@ class Solution:
         n = len(s)
 
         max_len = 0
-        j = 0
+        l = 0
         current_cost = 0
 
-        for i in range(n):
-            if i > j:
-                j = i
-                current_cost = 0
-            while j < len(s) and current_cost + cost[j] <= maxCost:
-                current_cost += cost[j]
-                j += 1
-            max_len = max(max_len, j - i)
-            current_cost -= cost[i]
-            i += 1
+        for r in range(n):
+            current_cost += cost[r]
+
+            while current_cost > maxCost:
+                current_cost -= cost[l]
+                l += 1
+            
+            max_len = max(max_len, r - l + 1)
 
         return max_len
             
