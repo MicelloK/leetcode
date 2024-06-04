@@ -1,13 +1,10 @@
 class Solution:
     def longestPalindrome(self, s: str) -> int:
-        count = {}
-        for c in s:
-            if c in count:
-                count[c] += 1
-            else:
-                count[c] = 1
-        
+        count = Counter(s)
         result = 0
-        for _, v in count.items():
+        odd = 0
+        for v in count.values():
             result += v//2 * 2
-        return min(result+1, len(s))
+            if v % 2 == 1:
+                odd = 1
+        return result + odd
