@@ -4,14 +4,14 @@ class Solution:
             return False
 
         hand.sort()
-        count = {num: hand.count(num) for num in hand}
+        count = Counter(hand)
         for num in count.keys():
-            while count[num] > 0:
-                for i in range(1, groupSize):
-                    if num+i not in count or count[num+i] == 0:
-                        return False
-                    count[num+i] -= 1
-                count[num] -= 1
+            if count[num] == 0:
+                continue
+            for i in range(1, groupSize):
+                if num+i not in count or count[num+i] < count[num]:
+                    return False
+                count[num+i] -= count[num]
         return True
 
 
