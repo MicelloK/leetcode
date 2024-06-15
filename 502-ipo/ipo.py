@@ -2,6 +2,9 @@ from queue import PriorityQueue
 
 class Solution:
     def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        if w > max(capital):
+            return w + sum(nlargest(k, profits))
+
         sorted_projects = sorted(zip(capital, profits))
         next_proj = 0
         projects = PriorityQueue()
