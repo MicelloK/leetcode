@@ -3,9 +3,10 @@ class Solution:
         l = 0
         r = int(sqrt(c))
         while l <= r:
-            if l ** 2 + r ** 2 == c:
+            pow_sum = l ** 2 + r ** 2
+            if pow_sum == c:
                 return True
-            if l ** 2 + r ** 2 < c:
+            if pow_sum < c:
                 l += 1
             else:
                 r -= 1
