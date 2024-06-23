@@ -1,48 +1,24 @@
 class Solution:
     def longestSubarray(self, nums: List[int], limit: int) -> int:
-        i = 0
-        j = 0
-        max_len = 1
-        min_num = nums[0]
-        max_num = nums[0]
-        elements = {nums[0]: 0}
-        
-        while j < len(nums) - 1:
-            j += 1
-            elements[nums[j]] = j
-            if nums[j] > max_num:
-                max_num = nums[j]
-                while max_num - min_num > limit:
-                    while elements and elements[min(elements)] < i:
-                        elements.pop(min(elements))
-                    if elements:
-                        i = min(elements.pop(min(elements)) + 1, j)
-                    else:
-                        i = j
-                    while elements and elements[min(elements)] < i:
-                        elements.pop(min(elements))
-                    if elements:
-                        min_num = min(elements)
-                    else:
-                        min_num = nums[i]
+        max_queue = deque() 
+        min_queue = deque()
 
-            elif nums[j] < min_num:
-                min_num = nums[j]
-                while max_num - min_num > limit:
-                    while elements and elements[max(elements)] < i:
-                        elemetns.pop(max(elements))
-                    if elements:
-                        i = min(elements.pop(max(elements)) + 1, j)
-                    else:
-                        i = j
-                    while elements and elements[max(elements)] < i:
-                        elements.pop(max(elements))
-                    if elements:
-                        max_num = max(elements)
-                    else:
-                        max_num = i
+        left = 0
 
-            max_len = max(max_len, j - i + 1)
-            
-        return max_len
+        for n in nums:
+            while max_queue and n > max_queue[-1]:
+                max_queue.pop()
+            max_queue.append(n)
 
+            while min_queue and n < min_queue[-1]:
+                min_queue.pop()
+            min_queue.append(n)
+
+            if max_queue[0] - min_queue[0] > limit:
+                if max_queue[0] == nums[left]:
+                    max_queue.popleft()
+                if min_queue[0] == nums[left]:
+                    min_queue.popleft()
+                left += 1
+
+        return len(nums) - left
