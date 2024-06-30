@@ -1,7 +1,7 @@
 class Dsu:
     def __init__(self, n: int):
         self.elements = [x for x in range(1, n+1)]
-        self.parents = deepcopy(self.elements)
+        self.parents = [x for x in range(1, n+1)]
         self.rank = [1 for _ in range(n)]
 
     def in_component(self, u: int, v: int):
@@ -15,7 +15,7 @@ class Dsu:
 
     def find(self, v: int):
         if v == self.parents[v-1]:
-                return v
+            return v
         else:
             self.parents[v-1] = self.find(self.parents[v-1])
             return self.parents[v-1]
@@ -29,10 +29,11 @@ class Dsu:
         
         if self.rank[u-1] > self.rank[v-1]:
             self.parents[v-1] = u
-            self.rank[u-1] += self.rank[v-1]
-        else:
+        elif self.rank[u-1] < self.rank[v-1]:
             self.parents[u-1] = v
-            self.rank[v-1] += self.rank[u-1]
+        else:
+            self.parents[v-1] = u
+            self.rank[u-1] += 1
 
 class Solution:
     def maxNumEdgesToRemove(self, n: int, edges: List[List[int]]) -> int:
